@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MemberHub - Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="login-page" class="login-container">
+        <div class="login-box">
+            <h1 class="app-title">MemberHub</h1>
+            <form id="login-form" class="login-form">
+                <div class="form-group">
+                    <label for="username-input">Username</label>
+                    <input type="text" id="username-input" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="password-input">Password</label>
+                    <input type="password" id="password-input" class="form-input" required>
+                </div>
+                <button type="submit" class="login-btn btn-primary">Login</button>
+                <div id="login-error" class="error-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="main-dashboard" class="dashboard hidden">
+        <div class="container">
+            <header class="dashboard-header">
+                <h1 class="dashboard-title">MemberHub Dashboard</h1>
+                <div class="header-actions">
+                    <button class="btn btn-primary" id="add-member-btn">➕ Add Member</button>
+                    <button class="btn btn-success" id="export-csv-btn">📊 Export CSV</button>
+                    <button class="btn btn-danger" id="logout-btn">🚪 Logout</button>
+                </div>
+            </header>
+
+            <!-- Stats -->
+            <section class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-number" id="total-members-count">0</div><div class="stat-label">Total Members</div></div>
+                    <div class="stat-card"><div class="stat-number" id="active-members-count">0</div><div class="stat-label">Active Members</div></div>
+                    <div class="stat-card"><div class="stat-number" id="payments-due-count">0</div><div class="stat-label">Payments Due</div></div>
+                    <div class="stat-card"><div class="stat-number" id="expiring-members-count">0</div><div class="stat-label">Expiring Soon</div></div>
+                    <div class="stat-card"><div class="stat-number" id="total-revenue-amount">₹0</div><div class="stat-label">Total Revenue</div></div>
+                </div>
+            </section>
+
+            <!-- Member Directory -->
+            <section class="members-management-section">
+                <div class="section-header">
+                    <h2 class="section-title">Member Directory</h2>
+                    <div class="search-filters-container">
+                        <input type="text" class="search-bar" id="member-search-input" placeholder="Search by name, email, or department...">
+                        <select class="filter-select" id="status-filter">
+                            <option value="">All Status</option>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                        <select class="filter-select" id="plan-filter">
+                            <option value="">All Plans</option>
+                            <option value="Gold">Gold</option>
+                            <option value="Silver">Silver</option>
+                            <option value="Bronze">Bronze</option>
+                            <option value="Basic">Basic</option>
+                        </select>
+                        <select class="filter-select" id="payment-filter">
+                            <option value="">All Payments</option>
+                            <option value="Paid">Paid</option>
+                            <option value="Due">Due</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="members-grid" id="members-grid-container">
+                    <div class="no-members-message">No members found. Add your first member!</div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div id="member-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title" class="modal-title">Add New Member</h3>
+                <button class="close-btn" id="modal-close-btn">&times;</button>
+            </div>
+            <form id="member-form" class="member-form">
+                <!-- Personal Info -->
+                <div class="form-section">
+                    <h4 class="form-section-title">Personal Information</h4>
+                    <div class="form-row">
+                        <div class="form-group"><label for="member-name-input">Full Name *</label><input type="text" id="member-name-input" class="form-input" required></div>
+                        <div class="form-group"><label for="member-email-input">Email *</label><input type="email" id="member-email-input" class="form-input" required></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label for="member-phone-input">Phone Number</label><input type="tel" id="member-phone-input" class="form-input"></div>
+                        <div class="form-group"><label for="member-status-select">Status *</label>
+                            <select id="member-status-select" class="form-select" required>
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!-- Work Info -->
+                <div class="form-section">
+                    <h4 class="form-section-title">Work Information</h4>
+                    <div class="form-row">
+                        <div class="form-group"><label for="member-department-select">Department *</label>
+                            <select id="member-department-select" class="form-select" required>
+                                <option value="">Select Department</option>
+                                <option value="Marketing">Marketing</option>
+                                <option value="Human Resources">Human Resources</option>
+                                <option value="Sales">Sales</option>
+                                <option value="Finance">Finance</option>
+                                <option value="Engineering">Engineering</option>
+                                <option value="SDE 1">SDE 1</option>
+                                <option value="SDE 2">SDE 2</option>
+                                <option value="SDE 3">SDE 3</option>
+                                <option value="Intern">Intern</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label for="membership-plan-select">Membership Plan *</label>
+                            <select id="membership-plan-select" class="form-select" required>
+                                <option value="">Select Plan</option>
+                                <option value="Gold">Gold - ₹1000</option>
+                                <option value="Silver">Silver - ₹800</option>
+                                <option value="Bronze">Bronze - ₹500</option>
+                                <option value="Basic">Basic - ₹250</option>
+                            </select>
+                            <div id="plan-info-display" class="plan-info hidden"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Dates -->
+                <div class="form-section">
+                    <h4 class="form-section-title">Membership Dates</h4>
+                    <div class="form-row">
+                        <div class="form-group"><label for="join-date-input">Join Date *</label><input type="date" id="join-date-input" class="form-input" required></div>
+                        <div class="form-group"><label for="expiry-date-input">Membership Expiry Date *</label><input type="date" id="expiry-date-input" class="form-input" required></div>
+                    </div>
+                </div>
+                <!-- Payment -->
+                <div class="form-section">
+                    <h4 class="form-section-title">Payment Information</h4>
+                    <div class="form-row">
+                        <div class="form-group"><label for="payment-status-select">Payment Status *</label>
+                            <select id="payment-status-select" class="form-select" required>
+                                <option value="Paid">Paid</option>
+                                <option value="Due">Due</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label for="last-payment-date-input">Last Payment Date</label><input type="date" id="last-payment-date-input" class="form-input"></div>
+                    </div>
+                </div>
+                <!-- Notes -->
+                <div class="form-section">
+                    <div class="form-group"><label for="member-notes-textarea">Notes</label>
+                        <textarea id="member-notes-textarea" class="form-textarea" rows="3" placeholder="Additional notes about the member..."></textarea>
+                    </div>
+                </div>
+                <!-- Actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancel-form-btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="save-member-btn">Save Member</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="loading-overlay" class="loading-overlay hidden"><div class="loading-spinner"></div></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
